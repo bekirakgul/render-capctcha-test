@@ -11,6 +11,10 @@ const PORT = process.env.PORT || 3001;
 const GEETEST_ID = process.env.GEETEST_ID;
 const GEETEST_KEY = process.env.GEETEST_KEY;
 
+// DEBUG logları (Geçici, test için. Deploy sonrası silinmeli!)
+console.log("GEETEST_ID:", GEETEST_ID);
+console.log("GEETEST_KEY:", GEETEST_KEY);
+
 app.use(cors());
 app.use(bodyParser.json());
 
