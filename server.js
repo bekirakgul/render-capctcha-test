@@ -37,7 +37,8 @@ app.get('/captcha/register', async (req, res) => {
     res.json(data);
   } catch (error) {
     console.error('Register error:', error.message);
-    res.status(500).json({ error: 'Captcha register failed' });
+    console.error('Error Details:', error.response?.data || error);
+    res.status(500).json({ error: 'Captcha register failed', details: error.message });
   }
 });
 
