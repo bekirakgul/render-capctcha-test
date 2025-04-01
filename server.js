@@ -22,6 +22,11 @@ const initGeetest = async () => {
   const data = res.data.replace(/^geetest_cb\((.*)\)$/, "$1");
   return JSON.parse(data);
 };
+// Homepage endpoint (frontend burada başlatıyor)
+app.get("/", (req, res) => {
+  res.send("🚀 Geetest Captcha Backend çalışıyor! /captcha/register ve /captcha/validate endpoint'lerini kullanın.");
+});
+
 
 // Register endpoint (frontend burada başlatıyor)
 app.get("/captcha/register", async (req, res) => {
