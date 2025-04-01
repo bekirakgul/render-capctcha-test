@@ -69,6 +69,8 @@ app.post('/captcha/validate', async (req, res) => {
   }
 });
 
+app.use(cors());
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
