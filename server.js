@@ -6,33 +6,35 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const GEETEST_ID = "be57a7d62b12dad80dc9c948f4eeb291";
-const GEETEST_KEY = "3cbfe48b2574a3fc4b125e08cb7747f7";
+// Güvenli şekilde environment değişkenlerinden alınıyor
+const GEETEST_ID = process.env.GEETEST_ID;
+const GEETEST_KEY = process.env.GEETEST_KEY;
 
-// Geetest library kullanmadan direk request ile çözüm
+// Geetest Register API
 const initGeetest = async () => {
-  // Geetest Register API (v3 için klasik yöntem)
   const res = await axios.get("https://gcaptcha4.geetest.com/load", {
     params: {
       gt: GEETEST_ID,
-      callback: "geetest_cb", // callback js için gerekli ama burada ignore edilebilir
+      callback: "geetest_cb", // JSONP callback, ama biz temizleyeceğiz
     },
   });
 
-  // JSONP cevabı temizleme
   const data = res.data.replace(/^geetest_cb\((.*)\)$/, "$1");
   return JSON.parse(data);
 };
 
+// Register endpoint (frontend burada başlatıyor)
 app.get("/captcha/register", async (req, res) => {
   try {
     const data = await initGeetest();
     res.json(data);
   } catch (error) {
+    console.error("Register error:", error.message);
     res.status(500).json({ error: "Captcha register failed" });
   }
 });
 
+// Captcha doğrulama endpointi
 app.post("/captcha/validate", async (req, res) => {
   const { lot_number, captcha_output, pass_token, gen_time } = req.body;
 
@@ -47,9 +49,7 @@ app.post("/captcha/validate", async (req, res) => {
         captcha_id: GEETEST_ID,
       },
       {
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
       }
     );
 
@@ -59,10 +59,13 @@ app.post("/captcha/validate", async (req, res) => {
       res.json({ success: false });
     }
   } catch (error) {
+    console.error("Validation error:", error.message);
     res.status(500).json({ error: "Validation failed" });
   }
 });
 
-app.listen(3001, () => {
-  console.log("Server listening on port 3001");
+// Render için doğru port ayarı (!!!)
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
+  console.log(`✅ Server running on port ${PORT}`);
 });
