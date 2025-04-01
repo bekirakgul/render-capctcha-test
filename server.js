@@ -6,8 +6,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const GEETEST_ID = "BURAYA_GEETEST_API_KEY";
-const GEETEST_KEY = "BURAYA_GEETEST_SECRET_KEY";
+const GEETEST_ID = "be57a7d62b12dad80dc9c948f4eeb291";
+const GEETEST_KEY = "3cbfe48b2574a3fc4b125e08cb7747f7";
 
 // Geetest library kullanmadan direk request ile çözüm
 const initGeetest = async () => {
